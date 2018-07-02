@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+
+	<select id="query1" parameterType="member" resultType="member">
+		SELECT
+		MEMBER_NO as memberNo,
+		MEMBER_ID as memberId,
+		MEMBER_PW as memberPw,
+		MEMBER_NAME as memberName,
+		MEMBER_ADDR as memberAddr,
+		GENDER AS
+		gender,
+		HOBBY AS hobby,
+		REG_DATE as regDate
+		FROM MEMBER
+		WHERE MEMBER_ID =
+		#{memberId} AND MEMBER_PW = #{memberPw}
+	</select>
+
+	<insert id="query2" parameterType="member">
+		INSERT INTO MEMBER VALUES
+		(SEQ_MEMBER.NEXTVAL, #{memberId}, #{memberPw}, #{memberName}, #{memberAddr}, #{gender}, #{hobby}, DEFAULT)
+	</insert>
+
+	<select id="query3" parameterType="int" resultType="member">
+		SELECT
+		MEMBER_NO as memberNo,
+		MEMBER_ID as memberId,
+		MEMBER_PW as memberPw,
+		MEMBER_NAME as memberName,
+		MEMBER_ADDR as memberAddr,
+		GENDER AS
+		gender,
+		HOBBY AS hobby,
+		REG_DATE as regDate
+		FROM MEMBER
+		WHERE MEMBER_NO =
+		#{memberNo}
+	</select>
+
+	<delete id="query4" parameterType="int">
+		DELETE FROM MEMBER
+		WHERE MEMBER_NO = #{memberNo}
+	</delete>
+
+	<update id="query5" parameterType="member">
+		UPDATE MEMBER SET MEMBER_PW = #{memberPw}
+		WHERE MEMBER_ID = #{memberId}
+	</update>
+
+	<select id="query6" resultType="member">
+		SELECT
+		MEMBER_NO as memberNo,
+		MEMBER_ID as memberId,
+		MEMBER_PW as memberPw,
+		MEMBER_NAME as memberName,
+		MEMBER_ADDR as memberAddr,
+		GENDER AS
+		gender,
+		HOBBY AS hobby,
+		REG_DATE as regDate
+		FROM MEMBER
+	</select>
+
+	<select id="query7" parameterType="search" resultType="member">
+		SELECT
+		MEMBER_NO as memberNo,
+		MEMBER_ID as memberId,
+		MEMBER_PW as memberPw,
+		MEMBER_NAME as memberName,
+		MEMBER_ADDR as memberAddr,
+		GENDER AS
+		gender,
+		HOBBY AS hobby,
+		REG_DATE as regDate
+		FROM MEMBER
+		<choose>
+			<when test="searchSelect.equals('name')">
+				WHERE MEMBER_NAME LIKE '%'||#{searchVal}||'%'
+			</when>
+			<when test="searchSelect.equals('id')">
+				WHERE MEMBER_ID LIKE '%'||#{searchVal}||'%'
+			</when>
+			<when test="searchSelect.equals('address')">
+				WHERE MEMBER_ADDR LIKE '%'||#{searchVal}||'%'
+			</when>
+		</choose>
+	</select>
+
+	<select id="query8" parameterType="search" resultType="member">
+		SELECT
+		MEMBER_NO as memberNo,
+		<if test="name != null">
+			MEMBER_NAME as memberName,
+		</if>
+		<if test="addr != null">
+			MEMBER_ADDR as memberAddr,
+		</if>
+		<if test="gender != null">
+			GENDER AS
+			gender,
+		</if>
+		<if test="hobby != null">
+			HOBBY AS hobby,
+		</if>
+		MEMBER_ID as memberId,
+		MEMBER_PW as memberPw,
+		REG_DATE as regDate
+		FROM MEMBER
+	</select>
+
+	<select id="query9" parameterType="member" resultType="member">
+		SELECT
+		MEMBER_NO as memberNo,
+		MEMBER_ID as memberId,
+		MEMBER_PW as memberPw,
+		MEMBER_NAME as memberName,
+		MEMBER_ADDR as memberAddr,
+		GENDER AS
+		gender,
+		HOBBY AS hobby,
+		REG_DATE as regDate
+		FROM MEMBER
+		WHERE
+		MEMBER_ADDR IN
+		<foreach item="addr" collection="array" open="(" separator="," close=")">
+			#{addr}
+		</foreach>
+	</select>
+</mapper>
+
+
+
